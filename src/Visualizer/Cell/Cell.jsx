@@ -6,8 +6,8 @@ export default class Cell extends Component {
     const {
       col,
       row,
-      isFinish,
       isStart,
+      isFinish,
       isWall,
       onMouseDown,
       onMouseEnter,
@@ -15,17 +15,17 @@ export default class Cell extends Component {
     } = this.props;
 
     const extraClassName = isFinish
-      ? "node-finish"
+      ? "cell-finish"
       : isStart
-      ? "node-start"
+      ? "cell-start"
       : isWall
-      ? "node-wall"
+      ? "cell-wall"
       : "";
 
     return (
       <div
         id={`cell-${row}-${col}`}
-        className={`node ${extraClassName}`}
+        className={`cell ${extraClassName}`}
         onMouseDown={() => onMouseDown(row, col)}
         onMouseEnter={() => onMouseEnter(row, col)}
         onMouseUp={() => onMouseUp()}

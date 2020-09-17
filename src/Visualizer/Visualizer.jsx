@@ -2,11 +2,18 @@ import React, { Component } from "react";
 import "./Visualizer.scss";
 import Cell from "./Cell/Cell";
 import NavBar from "./NavBar/NavBar";
+
+const START_CELL_ROW = 3;
+const START_CELL_COL = 4;
+const FINISH_CELL_ROW = 19;
+const FINISH_CELL_COL = 47;
+
 export default class Visualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       grid: [],
+      mouseIsPressed: false,
     };
   }
 
@@ -14,18 +21,55 @@ export default class Visualizer extends Component {
     const grid = getInitialGrid();
     this.setState({ grid });
   }
+
+  handleMouseDown(row, col) {
+    const newGrid = getUpdatedGrid(this.state.grid, row, col);
+    this.setState({ grid: newGrid, mouseIsPressed: true });
+  }
+
+  handleMouseEnter(row, col) {
+    if (!this.state.mouseIsPressed) return;
+    const newGrid = getUpdatedGrid(this.state.grid, row, col);
+    this.setState({ grid: newGrid });
+  }
+
+  handleMouseUp() {
+    this.setState({ mouseIsPressed: false });
+  }
+
+  clear() {
+    this.setState({ grid: [] });
+    const grid = getInitialGrid();
+    this.setState({ grid });
+  }
+
   render() {
-    const { grid } = this.state;
+    const { grid, mouseIsPressed } = this.state;
     return (
       <div>
-        <NavBar />
+        <NavBar onClearPathPressed={() => this.clear()} />
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex}>
-                {row.map((node, nodeIndex) => {
-                  const { row, col } = node;
-                  return <Cell key={nodeIndex} col={col} row={row}></Cell>;
+                {row.map((cell, cellIndex) => {
+                  const { row, col, isStart, isFinish, isWall } = cell;
+                  return (
+                    <Cell
+                      key={cellIndex}
+                      col={col}
+                      isFinish={isFinish}
+                      isStart={isStart}
+                      isWall={isWall}
+                      mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
+                      onMouseUp={() => this.handleMouseUp()}
+                      row={row}
+                    ></Cell>
+                  );
                 })}
               </div>
             );
@@ -52,5 +96,21 @@ const createCell = (row, col) => {
   return {
     row,
     col,
+    isStart: row === START_CELL_ROW && col === START_CELL_COL,
+    isFinish: row === FINISH_CELL_ROW && col === FINISH_CELL_COL,
+    isVisited: false,
+    isWall: false,
+    previousNode: null,
   };
+};
+
+const getUpdatedGrid = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
 };

@@ -1,7 +1,12 @@
 .cell {
     width: 20px;
     height: 20px;
-    outline: 1px solid #565656;
+    outline: 1px solid #7e7a7a;
     margin: 0;
     display: inline-block;
+}
+
+
+.cell-wall {
+    background-color: #DE6449;
 }

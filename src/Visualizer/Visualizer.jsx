@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Visualizer.scss";
 import Cell from "./Cell/Cell";
 import NavBar from "./NavBar/NavBar";
+import { BFS } from "./Algorithms/BFS/BFS";
 
 const START_CELL_ROW = 3;
 const START_CELL_COL = 4;
@@ -35,6 +36,41 @@ export default class Visualizer extends Component {
 
   handleMouseUp() {
     this.setState({ mouseIsPressed: false });
+  }
+
+  visualizeBFS() {
+    const { grid } = this.state;
+    const startCell = grid[START_CELL_ROW][START_CELL_COL];
+    const endCell = grid[FINISH_CELL_ROW][FINISH_CELL_COL];
+    const [path, visitedCells] = BFS(grid, startCell, endCell);
+
+    this.animateGrid(path, visitedCells);
+  }
+
+  animateGrid(cellsInPath, visitedCells) {
+    for (let i = 0; i <= visitedCells.length; i++) {
+      if (i === visitedCells.length) {
+        setTimeout(() => {
+          this.animatePath(cellsInPath);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const cell = visitedCells[i];
+        document.getElementById(`cell-${cell.row}-${cell.col}`).className =
+          "cell cell-visited";
+      }, 10 * i);
+    }
+  }
+
+  animatePath(cellsInPath) {
+    for (let i = 0; i < cellsInPath.length; i++) {
+      setTimeout(() => {
+        const cell = cellsInPath[i];
+        document.getElementById(`cell-${cell.row}-${cell.col}`).className =
+          "cell cell-path";
+      }, 50 * i);
+    }
   }
 
   clear() {

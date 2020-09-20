@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./Visualizer.scss";
 import Cell from "./Cell/Cell";
-import NavBar from "./NavBar/NavBar";
+import MenuExampleHeaderVertical from "./NavBar/NavBar";
+
 import { BFS } from "./Algorithms/BFS/BFS";
 import { DFS } from "./Algorithms/DFS/DFS";
 
@@ -11,13 +12,11 @@ const FINISH_CELL_ROW = 17;
 const FINISH_CELL_COL = 26;
 
 export default class Visualizer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      grid: [],
-      mouseIsPressed: false,
-    };
-  }
+  state = {
+    grid: [],
+    mouseIsPressed: false,
+    activeItem: "DFS",
+  };
 
   componentDidMount() {
     const grid = getInitialGrid();
@@ -39,6 +38,15 @@ export default class Visualizer extends Component {
     this.setState({ mouseIsPressed: false });
   }
 
+  visualize() {
+    const { activeItem } = this.state;
+    if (activeItem === "BFS") {
+      this.visualizeBFS();
+    } else if (activeItem === "DFS") {
+      this.visualizeDFS();
+    }
+    // console.log(this.state.activeItem);
+  }
   visualizeBFS() {
     const { grid } = this.state;
     const startCell = grid[START_CELL_ROW][START_CELL_COL];
@@ -89,15 +97,24 @@ export default class Visualizer extends Component {
     this.setState({ grid });
   }
 
+  switchActiveItem(item) {
+    this.setState({ activeItem: item });
+  }
+
   render() {
-    const { grid, mouseIsPressed } = this.state;
+    const { grid, mouseIsPressed, activeItem } = this.state;
     return (
-      <div>
-        <NavBar
-          onVisualizePressed={() => this.visualizeDFS()}
-          onClearPathPressed={() => this.clearPath()}
-        />
+      <div className="content">
+        <div className="sidebar">
+          <MenuExampleHeaderVertical
+            onVisualizePressed={() => this.visualize()}
+            onClearPathPressed={() => this.clearPath()}
+            switchActiveItem={(item) => this.switchActiveItem(item)}
+            activeItem={activeItem}
+          />
+        </div>
         <div className="grid">
+          <h1>{activeItem}</h1>
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex}>
@@ -160,7 +177,7 @@ const getUpdatedGrid = (grid, row, col) => {
   const node = newGrid[row][col];
   const newNode = {
     ...node,
-    isWall: !node.isWall,
+    isWall: !node.isStart && !node.isFinish ? !node.isWall : false,
   };
   newGrid[row][col] = newNode;
   return newGrid;

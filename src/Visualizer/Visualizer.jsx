@@ -3,11 +3,12 @@ import "./Visualizer.scss";
 import Cell from "./Cell/Cell";
 import NavBar from "./NavBar/NavBar";
 import { BFS } from "./Algorithms/BFS/BFS";
+import { DFS } from "./Algorithms/DFS/DFS";
 
-const START_CELL_ROW = 8;
-const START_CELL_COL = 5;
-const FINISH_CELL_ROW = 11;
-const FINISH_CELL_COL = 25;
+const START_CELL_ROW = 10;
+const START_CELL_COL = 10;
+const FINISH_CELL_ROW = 17;
+const FINISH_CELL_COL = 26;
 
 export default class Visualizer extends Component {
   constructor(props) {
@@ -44,7 +45,14 @@ export default class Visualizer extends Component {
     const endCell = grid[FINISH_CELL_ROW][FINISH_CELL_COL];
     const [path, visitedCells] = BFS(grid, startCell, endCell);
 
-    // console.log("path", path, "visitedcells", visitedCells);
+    this.animateGrid(path, visitedCells);
+  }
+
+  visualizeDFS() {
+    const { grid } = this.state;
+    const startCell = grid[START_CELL_ROW][START_CELL_COL];
+    const endCell = grid[FINISH_CELL_ROW][FINISH_CELL_COL];
+    const [path, visitedCells] = DFS(grid, startCell, endCell);
 
     this.animateGrid(path, visitedCells);
   }
@@ -86,7 +94,7 @@ export default class Visualizer extends Component {
     return (
       <div>
         <NavBar
-          onVisualizePressed={() => this.visualizeBFS()}
+          onVisualizePressed={() => this.visualizeDFS()}
           onClearPathPressed={() => this.clearPath()}
         />
         <div className="grid">

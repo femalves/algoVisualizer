@@ -4,10 +4,10 @@ import Cell from "./Cell/Cell";
 import NavBar from "./NavBar/NavBar";
 import { BFS } from "./Algorithms/BFS/BFS";
 
-const START_CELL_ROW = 3;
-const START_CELL_COL = 4;
-const FINISH_CELL_ROW = 19;
-const FINISH_CELL_COL = 47;
+const START_CELL_ROW = 8;
+const START_CELL_COL = 5;
+const FINISH_CELL_ROW = 11;
+const FINISH_CELL_COL = 25;
 
 export default class Visualizer extends Component {
   constructor(props) {
@@ -44,6 +44,8 @@ export default class Visualizer extends Component {
     const endCell = grid[FINISH_CELL_ROW][FINISH_CELL_COL];
     const [path, visitedCells] = BFS(grid, startCell, endCell);
 
+    // console.log("path", path, "visitedcells", visitedCells);
+
     this.animateGrid(path, visitedCells);
   }
 
@@ -73,7 +75,7 @@ export default class Visualizer extends Component {
     }
   }
 
-  clear() {
+  clearPath() {
     this.setState({ grid: [] });
     const grid = getInitialGrid();
     this.setState({ grid });
@@ -83,7 +85,10 @@ export default class Visualizer extends Component {
     const { grid, mouseIsPressed } = this.state;
     return (
       <div>
-        <NavBar onClearPathPressed={() => this.clear()} />
+        <NavBar
+          onVisualizePressed={() => this.visualizeBFS()}
+          onClearPathPressed={() => this.clearPath()}
+        />
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
@@ -121,7 +126,9 @@ const getInitialGrid = () => {
   for (let row = 0; row < 20; row++) {
     const currentRow = [];
     for (let col = 0; col < 50; col++) {
-      currentRow.push(createCell(row, col));
+      let newCell = createCell(row, col);
+
+      currentRow.push(newCell);
     }
     grid.push(currentRow);
   }

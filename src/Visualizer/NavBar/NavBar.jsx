@@ -9,7 +9,6 @@ import Box from "@material-ui/core/Box";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -47,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleTabs() {
+export default function SimpleTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { onVisualizePressed, onClearPathPressed } = props;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -66,8 +66,16 @@ export default function SimpleTabs() {
           <Tab label="Dijkstra" {...a11yProps(0)} />
           <Tab label="BFS" {...a11yProps(1)} />
           <Tab label="DFS" {...a11yProps(2)} />
-          <Tab label="Visualize" {...a11yProps(3)} />
-          <Tab label="Clear" {...a11yProps(4)} />
+          <Tab
+            label="Visualize"
+            {...a11yProps(3)}
+            onClick={() => onVisualizePressed()}
+          />
+          <Tab
+            label="Clear"
+            {...a11yProps(4)}
+            onClick={() => onClearPathPressed()}
+          />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>

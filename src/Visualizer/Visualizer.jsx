@@ -45,7 +45,6 @@ export default class Visualizer extends Component {
     } else if (activeItem === "DFS") {
       this.visualizeDFS();
     }
-    // console.log(this.state.activeItem);
   }
   visualizeBFS() {
     const { grid } = this.state;

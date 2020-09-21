@@ -8,12 +8,10 @@ export function BFS(grid, startCell, finishCell) {
     if (currCell.isWall) continue;
     if (!explored.includes(currCell)) {
       let neighbors = getNeighbors(currCell, grid);
-      console.log(neighbors);
       for (let neighbor of neighbors) {
         let new_path = [...path, neighbor];
         queue.push(new_path);
         if (neighbor === finishCell) {
-          console.log("out", new_path);
           return [new_path, explored];
         }
         explored.push(currCell);
@@ -28,21 +26,13 @@ function getNeighbors(cell, grid) {
 
   const { col, row } = cell;
 
-  if (row > 0) {
-    neighbors.push(grid[row - 1][col]);
-  }
+  if (row > 0) neighbors.push(grid[row - 1][col]);
 
-  if (col > 0) {
-    neighbors.push(grid[row][col - 1]);
-  }
+  if (col > 0) neighbors.push(grid[row][col - 1]);
 
-  if (col < grid[0].length - 1) {
-    neighbors.push(grid[row][col + 1]);
-  }
+  if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]);
 
-  if (row < grid.length - 1) {
-    neighbors.push(grid[row + 1][col]);
-  }
+  if (row < grid.length - 1) neighbors.push(grid[row + 1][col]);
 
   return neighbors;
 }

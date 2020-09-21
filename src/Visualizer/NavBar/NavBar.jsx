@@ -3,11 +3,6 @@ import { Menu } from "semantic-ui-react";
 import { Button } from "semantic-ui-react";
 
 export default class MenuExampleHeaderVertical extends Component {
-  //   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
-  handleItemClick = (e, { name }) => {
-    console.log(name);
-  };
   render() {
     const {
       onVisualizePressed,
@@ -28,13 +23,13 @@ export default class MenuExampleHeaderVertical extends Component {
               onClick={() => switchActiveItem("BFS")}
             />
             <Menu.Item
-              name="Graph DFS"
+              name="DFS"
               active={activeItem === "DFS"}
               onClick={() => switchActiveItem("DFS")}
             />
             <Menu.Item
               name="Dijkstra"
-              active={activeItem === "Dijkstra"}
+              active={false}
               onClick={() => switchActiveItem("Dijkstra")}
             />
           </Menu.Menu>
